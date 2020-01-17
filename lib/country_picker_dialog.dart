@@ -139,7 +139,7 @@ class SingleChoiceDialogState extends State<CountryPickerDialog> {
                 .map((item) => SimpleDialogOption(
                       child: widget.itemBuilder != null
                           ? widget.itemBuilder(item)
-                          : Text(item.name),
+                          : Text(item.name(context)),
                       onPressed: () {
                         widget.onValuePicked(item);
                         Navigator.pop(context);
@@ -182,7 +182,8 @@ class SingleChoiceDialogState extends State<CountryPickerDialog> {
         setState(() {
           _filteredCountries = _allCountries
               .where((Country country) =>
-                  country.name.toLowerCase().startsWith(value.toLowerCase()) ||
+                  country.nameZh.startsWith(value)||
+                  country.nameEn.toLowerCase().startsWith(value.toLowerCase()) ||
                   country.phoneCode.startsWith(value) ||
                   country.isoCode.toLowerCase().startsWith(value.toLowerCase()))
               .toList();

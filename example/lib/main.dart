@@ -51,24 +51,6 @@ class _HomePageState extends State<DemoPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('CountryPickerDropdown'),
-                ListTile(title: _buildCountryPickerDropdown(false)),
-              ],
-            ),
-          ),
-          Card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text('CountryPickerDropdown (filtered)'),
-                ListTile(title: _buildCountryPickerDropdown(true)),
-              ],
-            ),
-          ),
-          Card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
                 Text('CountryPickerDialog'),
                 ListTile(
                   onTap: _openCountryPickerDialog,
@@ -96,7 +78,7 @@ class _HomePageState extends State<DemoPage> {
                 Text('CountryPickerCupertino'),
                 ListTile(
                   title: _buildCupertinoSelectedItem(_selectedCupertinoCountry),
-                  onTap: _openCupertinoCountryPicker,
+                  onTap: ()=>{},
                 ),
               ],
             ),
@@ -109,7 +91,7 @@ class _HomePageState extends State<DemoPage> {
                 ListTile(
                   title: _buildCupertinoSelectedItem(
                       _selectedFilteredCupertinoCountry),
-                  onTap: _openFilteredCupertinoCountryPicker,
+                  onTap: ()=>{},
                 ),
               ],
             ),
@@ -119,48 +101,13 @@ class _HomePageState extends State<DemoPage> {
     );
   }
 
-  _buildCountryPickerDropdown(bool filtered) => Row(
-        children: <Widget>[
-          CountryPickerDropdown(
-            initialValue: 'AR',
-            itemBuilder: _buildDropdownItem,
-            itemFilter: filtered
-                ? (c) => ['AR', 'DE', 'GB', 'CN'].contains(c.isoCode)
-                : null,
-            onValuePicked: (Country country) {
-              print("${country.name}");
-            },
-          ),
-          SizedBox(
-            width: 8.0,
-          ),
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(labelText: "Phone"),
-            ),
-          )
-        ],
-      );
-
-  Widget _buildDropdownItem(Country country) => Container(
-        child: Row(
-          children: <Widget>[
-            CountryPickerUtils.getDefaultFlagImage(country),
-            SizedBox(
-              width: 8.0,
-            ),
-            Text("+${country.phoneCode}(${country.isoCode})"),
-          ],
-        ),
-      );
-
   Widget _buildDialogItem(Country country) => Row(
         children: <Widget>[
           CountryPickerUtils.getDefaultFlagImage(country),
           SizedBox(width: 8.0),
           Text("+${country.phoneCode}"),
           SizedBox(width: 8.0),
-          Flexible(child: Text(country.name))
+          Flexible(child: Text(country.name(context)))
         ],
       );
 
@@ -195,32 +142,6 @@ class _HomePageState extends State<DemoPage> {
                 itemBuilder: _buildDialogItem)),
       );
 
-  void _openCupertinoCountryPicker() => showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return CountryPickerCupertino(
-          backgroundColor: Colors.black,
-          itemBuilder: _buildCupertinoItem,
-          pickerSheetHeight: 300.0,
-          pickerItemHeight: 75,
-          initialCountry: _selectedCupertinoCountry,
-          onValuePicked: (Country country) =>
-              setState(() => _selectedCupertinoCountry = country),
-        );
-      });
-
-  void _openFilteredCupertinoCountryPicker() => showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return CountryPickerCupertino(
-          backgroundColor: Colors.white,
-          pickerSheetHeight: 200.0,
-          initialCountry: _selectedFilteredCupertinoCountry,
-          onValuePicked: (Country country) =>
-              setState(() => _selectedFilteredCupertinoCountry = country),
-          itemFilter: (c) => ['AR', 'DE', 'GB', 'CN'].contains(c.isoCode),
-        );
-      });
 
   Widget _buildCupertinoSelectedItem(Country country) {
     return Row(
@@ -229,7 +150,7 @@ class _HomePageState extends State<DemoPage> {
         SizedBox(width: 8.0),
         Text("+${country.phoneCode}"),
         SizedBox(width: 8.0),
-        Flexible(child: Text(country.name))
+        Flexible(child: Text(country.name(context)))
       ],
     );
   }
@@ -248,7 +169,7 @@ class _HomePageState extends State<DemoPage> {
           SizedBox(width: 8.0),
           Text("+${country.phoneCode}"),
           SizedBox(width: 8.0),
-          Flexible(child: Text(country.name))
+          Flexible(child: Text(country.name(context)))
         ],
       ),
     );
